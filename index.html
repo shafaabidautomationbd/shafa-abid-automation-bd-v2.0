@@ -13,31 +13,146 @@
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Admin Login</h2>
+            <h2><i class="fas fa-user-cog"></i> Admin Login</h2>
             <form id="loginForm">
-                <input type="password" id="adminPassword" placeholder="Enter Admin Password" required>
-                <button type="submit" class="btn">Login</button>
+                <div class="form-group">
+                    <label for="adminPassword"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button type="button" class="btn btn-secondary close-modal-btn">
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Header with Admin Button -->
+    <!-- Admin Panel Modal -->
+    <div id="adminPanelModal" class="modal">
+        <div class="modal-content admin-panel">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-cogs"></i> Admin Control Panel</h2>
+            
+            <div class="admin-sections">
+                <!-- Company Logo Management -->
+                <div class="admin-section">
+                    <h3><i class="fas fa-image"></i> Company Logo</h3>
+                    <div class="current-logo">
+                        <h4>Current Logo:</h4>
+                        <img id="currentLogoPreview" src="" alt="Company Logo" class="logo-preview">
+                    </div>
+                    <form id="logoForm">
+                        <div class="file-upload">
+                            <label for="logoUpload" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload New Logo
+                            </label>
+                            <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                            <div id="logoImagePreview" class="image-preview"></div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Logo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Cover Image Management -->
+                <div class="admin-section">
+                    <h3><i class="fas fa-images"></i> Hero Cover Image</h3>
+                    <div class="current-cover">
+                        <h4>Current Cover:</h4>
+                        <div id="currentCoverPreview" class="cover-preview"></div>
+                    </div>
+                    <form id="coverForm">
+                        <div class="file-upload">
+                            <label for="coverUpload" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload New Cover
+                            </label>
+                            <input type="file" id="coverUpload" accept="image/*" style="display: none;">
+                            <div id="coverImagePreview" class="image-preview"></div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Cover
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Content Management -->
+                <div class="admin-section">
+                    <h3><i class="fas fa-edit"></i> Company Information</h3>
+                    <form id="companyInfoForm">
+                        <div class="form-group">
+                            <label for="companyName">Company Name</label>
+                            <input type="text" id="companyName" placeholder="Enter company name">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyTagline">Tagline</label>
+                            <input type="text" id="companyTagline" placeholder="Enter tagline">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyDescription">Description</label>
+                            <textarea id="companyDescription" placeholder="Enter company description"></textarea>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Data Management -->
+                <div class="admin-section">
+                    <h3><i class="fas fa-database"></i> Data Management</h3>
+                    <div class="admin-actions">
+                        <button id="exportDataBtn" class="btn btn-secondary">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                        <button id="importDataBtn" class="btn btn-secondary">
+                            <i class="fas fa-upload"></i> Import Data
+                        </button>
+                        <button id="resetDataBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Reset All Data
+                        </button>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header with Admin Controls -->
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>Shafa Abid Automation</h1>
-                <p>Strategic Industrial Solutions</p>
+                <img id="companyLogo" src="" alt="Company Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1 id="companyNameHeader">Shafa Abid Automation</h1>
+                    <p id="companyTaglineHeader">Strategic Industrial Solutions</p>
+                </div>
             </div>
             <nav class="navbar">
-                <a href="#home">Home</a>
-                <a href="#about">About</a>
-                <a href="#products">Products</a>
-                <a href="#brands">Brands</a>
-                <a href="#gallery">Gallery</a>
-                <a href="#contact">Contact</a>
-                <button id="adminBtn" class="admin-btn">
-                    <i class="fas fa-user-cog"></i> Admin
-                </button>
+                <a href="#home"><i class="fas fa-home"></i> Home</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#products"><i class="fas fa-box"></i> Products</a>
+                <a href="#brands"><i class="fas fa-tags"></i> Brands</a>
+                <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
+                <a href="#contact"><i class="fas fa-address-book"></i> Contact</a>
+                <div class="admin-controls">
+                    <button id="adminPanelBtn" class="admin-btn" style="display: none;">
+                        <i class="fas fa-cogs"></i> Control Panel
+                    </button>
+                    <button id="adminBtn" class="admin-btn">
+                        <i class="fas fa-user-cog"></i> Admin
+                    </button>
+                </div>
             </nav>
             <div class="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -45,19 +160,31 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Uploadable Cover -->
     <section class="hero" id="home">
+        <div class="hero-bg" id="heroBackground"></div>
         <div class="hero-content">
-            <h1>Unlock Industrial Excellence</h1>
-            <p>Strategic-grade automation solutions that deliver unmatched value, clarity, and trust for your business growth.</p>
-            <a href="#products" class="btn">Explore Solutions</a>
+            <h1 id="heroTitle">Unlock Industrial Excellence</h1>
+            <p id="heroDescription">Strategic-grade automation solutions that deliver unmatched value, clarity, and trust for your business growth.</p>
+            <a href="#products" class="btn btn-hero">
+                <i class="fas fa-rocket"></i> Explore Solutions
+            </a>
         </div>
+        <!-- Cover Image Upload Button (Admin Only) -->
+        <button id="editCoverBtn" class="edit-cover-btn" style="display: none;">
+            <i class="fas fa-camera"></i> Edit Cover
+        </button>
     </section>
 
     <!-- Featured Products -->
     <section class="featured-products">
         <div class="container">
-            <h2 class="section-title">Premium Solutions</h2>
+            <div class="section-header">
+                <h2 class="section-title">Premium Solutions</h2>
+                <button id="addFeaturedBtn" class="admin-action-btn" style="display: none;">
+                    <i class="fas fa-plus"></i> Add Featured
+                </button>
+            </div>
             <div class="featured-grid">
                 <!-- Dynamic content -->
             </div>
@@ -67,36 +194,14 @@
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container">
-            <h2 class="section-title">Strategic Positioning</h2>
+            <div class="section-header">
+                <h2 class="section-title">Strategic Positioning</h2>
+                <button id="editAboutBtn" class="admin-action-btn" style="display: none;">
+                    <i class="fas fa-edit"></i> Edit About
+                </button>
+            </div>
             <div class="about-content">
-                <div class="about-item">
-                    <div class="about-icon">
-                        <i class="fas fa-chess-king"></i>
-                    </div>
-                    <h3>Strategic Vision</h3>
-                    <p>Established with a clear mission to reduce operational friction and strengthen industrial positioning</p>
-                </div>
-                <div class="about-item">
-                    <div class="about-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h3>Comprehensive Coverage</h3>
-                    <p>Delivering precision automation across all 64 districts of Bangladesh</p>
-                </div>
-                <div class="about-item">
-                    <div class="about-icon">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <h3>Extensive Portfolio</h3>
-                    <p>100+ product series with 10,000+ specifications for complete industrial needs</p>
-                </div>
-                <div class="about-item">
-                    <div class="about-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3>Strategic Alignment</h3>
-                    <p>Solutions chosen not for availability, but for alignment with long-term industrial strategy</p>
-                </div>
+                <!-- Dynamic content -->
             </div>
         </div>
     </section>
@@ -106,41 +211,66 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Our Product Ecosystem</h2>
-                <div class="search-filter">
-                    <input type="text" id="productSearch" placeholder="Search strategic solutions...">
-                    <select id="categoryFilter">
-                        <option value="all">All Categories</option>
-                    </select>
+                <div class="header-actions">
+                    <div class="search-filter">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="productSearch" placeholder="Search strategic solutions...">
+                        </div>
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                    <button id="addProductBtn" class="admin-action-btn" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
                 </div>
             </div>
             <div class="products-grid">
                 <!-- Dynamic content -->
             </div>
             
-            <!-- Admin Add Product Form (Hidden by default) -->
-            <div id="adminProductForm" class="admin-form" style="display: none;">
-                <h3><i class="fas fa-plus-circle"></i> Manage Products</h3>
-                <form id="productForm">
-                    <input type="hidden" id="productId">
-                    <div class="form-row">
-                        <input type="text" id="productName" placeholder="Product Name" required>
-                        <input type="text" id="productCategory" placeholder="Category" required>
-                    </div>
-                    <textarea id="productDescription" placeholder="Strategic Description" required></textarea>
-                    <div class="form-row">
-                        <div class="file-upload">
-                            <label for="productImageUpload" class="file-label">
-                                <i class="fas fa-cloud-upload-alt"></i> Upload Product Image
-                            </label>
-                            <input type="file" id="productImageUpload" accept="image/*" style="display: none;">
-                            <div id="imagePreview" class="image-preview"></div>
+            <!-- Product Form Modal -->
+            <div id="productFormModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2 id="productFormTitle"><i class="fas fa-box"></i> Add New Product</h2>
+                    <form id="productForm">
+                        <input type="hidden" id="productId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">Product Name</label>
+                                <input type="text" id="productName" placeholder="Enter product name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productCategory">Category</label>
+                                <input type="text" id="productCategory" placeholder="Enter category" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn btn-primary" id="submitProductBtn">Add Product</button>
-                        <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription" placeholder="Enter product description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Image</label>
+                            <div class="file-upload">
+                                <label for="productImageUpload" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload Product Image
+                                </label>
+                                <input type="file" id="productImageUpload" accept="image/*" style="display: none;">
+                                <div id="productImagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Product
+                            </button>
+                            <button type="button" class="btn btn-secondary close-modal-btn">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -158,28 +288,37 @@
                 <!-- Dynamic content -->
             </div>
             
-            <!-- Admin Add Brand Form -->
-            <div id="adminBrandForm" class="admin-form" style="display: none;">
-                <h3><i class="fas fa-plus-circle"></i> Manage Brands</h3>
-                <form id="brandForm">
-                    <input type="hidden" id="brandId">
-                    <div class="form-row">
-                        <input type="text" id="brandName" placeholder="Brand Name" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="file-upload">
-                            <label for="brandImageUpload" class="file-label">
-                                <i class="fas fa-cloud-upload-alt"></i> Upload Brand Logo
-                            </label>
-                            <input type="file" id="brandImageUpload" accept="image/*" style="display: none;">
-                            <div id="brandImagePreview" class="image-preview"></div>
+            <!-- Brand Form Modal -->
+            <div id="brandFormModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2 id="brandFormTitle"><i class="fas fa-tag"></i> Add New Brand</h2>
+                    <form id="brandForm">
+                        <input type="hidden" id="brandId">
+                        <div class="form-group">
+                            <label for="brandName">Brand Name</label>
+                            <input type="text" id="brandName" placeholder="Enter brand name" required>
                         </div>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn btn-primary" id="submitBrandBtn">Add Brand</button>
-                        <button type="button" class="btn btn-secondary" id="cancelBrandBtn">Cancel</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label>Brand Logo</label>
+                            <div class="file-upload">
+                                <label for="brandImageUpload" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload Brand Logo
+                                </label>
+                                <input type="file" id="brandImageUpload" accept="image/*" style="display: none;">
+                                <div id="brandImagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Brand
+                            </button>
+                            <button type="button" class="btn btn-secondary close-modal-btn">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -197,28 +336,37 @@
                 <!-- Dynamic content -->
             </div>
             
-            <!-- Admin Add Gallery Form -->
-            <div id="adminGalleryForm" class="admin-form" style="display: none;">
-                <h3><i class="fas fa-plus-circle"></i> Manage Gallery</h3>
-                <form id="galleryForm">
-                    <input type="hidden" id="galleryId">
-                    <div class="form-row">
-                        <input type="text" id="galleryTitle" placeholder="Image Title" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="file-upload">
-                            <label for="galleryImageUpload" class="file-label">
-                                <i class="fas fa-cloud-upload-alt"></i> Upload Gallery Image
-                            </label>
-                            <input type="file" id="galleryImageUpload" accept="image/*" style="display: none;">
-                            <div id="galleryImagePreview" class="image-preview"></div>
+            <!-- Gallery Form Modal -->
+            <div id="galleryFormModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2 id="galleryFormTitle"><i class="fas fa-image"></i> Add Gallery Image</h2>
+                    <form id="galleryForm">
+                        <input type="hidden" id="galleryId">
+                        <div class="form-group">
+                            <label for="galleryTitle">Image Title</label>
+                            <input type="text" id="galleryTitle" placeholder="Enter image title" required>
                         </div>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn btn-primary" id="submitGalleryBtn">Add Image</button>
-                        <button type="button" class="btn btn-secondary" id="cancelGalleryBtn">Cancel</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label>Gallery Image</label>
+                            <div class="file-upload">
+                                <label for="galleryImageUpload" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload Gallery Image
+                                </label>
+                                <input type="file" id="galleryImageUpload" accept="image/*" style="display: none;">
+                                <div id="galleryImagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Image
+                            </button>
+                            <button type="button" class="btn btn-secondary close-modal-btn">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -226,54 +374,15 @@
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
         <div class="container">
-            <h2 class="section-title">Strategic Contact</h2>
+            <div class="section-header">
+                <h2 class="section-title">Strategic Contact</h2>
+                <button id="editContactBtn" class="admin-action-btn" style="display: none;">
+                    <i class="fas fa-edit"></i> Edit Contact
+                </button>
+            </div>
             <div class="contact-content">
                 <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-chess-king"></i>
-                        </div>
-                        <h3>Strategic Vision</h3>
-                        <p>Our thesis is simple: Strategic-grade automation saves businesses time, money, and energy while unlocking growth, clarity, and trust.</p>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <h3>Leadership</h3>
-                        <p><strong>Md. Mostafa Shahid</strong><br>Founder & Strategic Director</p>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <h3>Direct Contact</h3>
-                        <p>+880 1869-552775</p>
-                        <p>+880 1406-503242</p>
-                        <p>shafaabidautomation.bd@gmail.com</p>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Strategic Location</h3>
-                        <p>Shop No: 01, Porir Rasta, Cort Para, Kumira-4314, Sitakunda, Chittagong</p>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3>Strategic Hours</h3>
-                        <p><strong>Saturday - Thursday:</strong> 9:00 AM - 7:00 PM</p>
-                        <p><strong>Friday:</strong> 9:00 AM - 12:00 PM | 3:00 PM - 7:00 PM</p>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-bullseye"></i>
-                        </div>
-                        <h3>Strategic Intent</h3>
-                        <p>By reducing friction across execution and communication, we strengthen positioning, signal intent, and simplify operations.</p>
-                    </div>
+                    <!-- Dynamic content -->
                 </div>
             </div>
         </div>
@@ -284,12 +393,15 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <h3>Shafa Abid Automation</h3>
-                    <p>Strategic Industrial Solutions</p>
+                    <img id="footerLogo" src="" alt="Company Logo" class="footer-logo-img">
+                    <div>
+                        <h3 id="footerCompanyName">Shafa Abid Automation</h3>
+                        <p class="footer-tagline" id="footerTagline">Strategic Industrial Solutions</p>
+                    </div>
                 </div>
                 <div class="footer-info">
-                    <p>&copy; <span id="currentYear"></span> Shafa Abid Automation BD. All rights reserved.</p>
-                    <p class="footer-tagline">Strategic-grade solutions delivering unmatched value</p>
+                    <p>&copy; <span id="currentYear"></span> <span id="footerCopyright">Shafa Abid Automation BD</span>. All rights reserved.</p>
+                    <p class="footer-message" id="footerMessage">Strategic-grade solutions delivering unmatched value</p>
                 </div>
             </div>
         </div>
