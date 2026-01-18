@@ -1,1 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shafa Abid Automation BD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Shafa Abid Automation BD</h1>
+                <p>Industrial Electrical & Electronics Solutions</p>
+            </div>
+            <nav class="navbar">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#products">Products</a>
+                <a href="#brands">Brands</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
 
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Industrial Electrical & Automation Solutions</h1>
+            <p>Established in 2017, professional suppliers across Bangladesh</p>
+            <a href="#contact" class="btn">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="featured-grid">
+                <!-- Featured products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Company</h2>
+            <div class="about-content">
+                <div class="about-item">
+                    <h3><i class="fas fa-calendar-alt"></i> Established</h3>
+                    <p>2017</p>
+                </div>
+                <div class="about-item">
+                    <h3><i class="fas fa-user-tie"></i> Owner</h3>
+                    <p>Md. Mostafa Shahid</p>
+                </div>
+                <div class="about-item">
+                    <h3><i class="fas fa-money-bill-wave"></i> Capital</h3>
+                    <p>xxx Million BDT</p>
+                </div>
+                <div class="about-item">
+                    <h3><i class="fas fa-boxes"></i> Products</h3>
+                    <p>100+ series, 10,000+ specifications</p>
+                </div>
+                <div class="about-item">
+                    <h3><i class="fas fa-map-marked-alt"></i> Coverage</h3>
+                    <p>All 64 districts of Bangladesh</p>
+                </div>
+                <div class="about-item">
+                    <h3><i class="fas fa-industry"></i> Specialization</h3>
+                    <p>Industrial Automation, Electrical Components, Sensors, Drives, Control Systems</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Products</h2>
+                <div class="search-filter">
+                    <input type="text" id="productSearch" placeholder="Search products...">
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="products-grid">
+                <div class="no-products">
+                    <p>No Products Found</p>
+                    <p>Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+            <div class="add-product-form">
+                <h3>Add New Product</h3>
+                <form id="productForm">
+                    <input type="text" id="productName" placeholder="Product Name" required>
+                    <input type="text" id="productCategory" placeholder="Category" required>
+                    <textarea id="productDescription" placeholder="Description" required></textarea>
+                    <input type="text" id="productImage" placeholder="Image URL" required>
+                    <button type="submit" class="btn">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands Section -->
+    <section class="brands-section" id="brands">
+        <div class="container">
+            <h2 class="section-title">Our Brands</h2>
+            <div class="brands-grid">
+                <div class="no-brands">
+                    <p>Add New Brand</p>
+                </div>
+            </div>
+            <div class="add-brand-form">
+                <h3>Add New Brand</h3>
+                <form id="brandForm">
+                    <input type="text" id="brandName" placeholder="Brand Name" required>
+                    <input type="text" id="brandImage" placeholder="Brand Logo URL" required>
+                    <button type="submit" class="btn">Add Brand</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Gallery</h2>
+            <div class="gallery-grid">
+                <div class="no-gallery">
+                    <p>Add Gallery Image</p>
+                </div>
+            </div>
+            <div class="add-gallery-form">
+                <h3>Add Gallery Image</h3>
+                <form id="galleryForm">
+                    <input type="text" id="galleryTitle" placeholder="Image Title" required>
+                    <input type="text" id="galleryImage" placeholder="Image URL" required>
+                    <button type="submit" class="btn">Add Image</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item facebook">
+                        <h3><i class="fab fa-facebook"></i> Facebook Page</h3>
+                        <p>Follow us on Facebook for updates and offers</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3><i class="fas fa-phone"></i> Phone</h3>
+                        <p>+880 1869-552775</p>
+                        <p>+880 1406-503242</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3><i class="fas fa-envelope"></i> Email</h3>
+                        <p>shafaabidautomation.bd@gmail.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3><i class="fas fa-map-marker-alt"></i> Address</h3>
+                        <p>Shop No: 01, Porir Rasta, Cort Para, Kumira-4314, Sitakunda, Chittagong</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3><i class="fas fa-clock"></i> Business Hours</h3>
+                        <p><strong>Saturday - Thursday:</strong> 9:00 AM - 7:00 PM</p>
+                        <p><strong>Friday:</strong> 9:00 AM - 12:00 PM, 3:00 PM - 7:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Shafa Abid Automation BD. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
