@@ -2,11 +2,15 @@
 // CONFIGURATION
 // ====================
 const ADMIN_PASSWORD = "admin123"; // Change this to your secure password
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const LOCAL_STORAGE_KEYS = {
     PRODUCTS: 'shafa_products',
     BRANDS: 'shafa_brands',
     GALLERY: 'shafa_gallery',
-    ADMIN_LOGGED_IN: 'admin_logged_in'
+    COMPANY_INFO: 'shafa_company_info',
+    ADMIN_LOGGED_IN: 'admin_logged_in',
+    COMPANY_LOGO: 'shafa_company_logo',
+    HERO_COVER: 'shafa_hero_cover'
 };
 
 // ====================
@@ -17,6 +21,23 @@ let state = {
     products: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS)) || [],
     brands: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.BRANDS)) || [],
     gallery: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.GALLERY)) || [],
+    companyInfo: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.COMPANY_INFO)) || {
+        name: 'Shafa Abid Automation',
+        tagline: 'Strategic Industrial Solutions',
+        description: 'Strategic-grade automation solutions delivering unmatched value',
+        contact: {
+            phone1: '+880 1869-552775',
+            phone2: '+880 1406-503242',
+            email: 'shafaabidautomation.bd@gmail.com',
+            address: 'Shop No: 01, Porir Rasta, Cort Para, Kumira-4314, Sitakunda, Chittagong',
+            hours: {
+                weekdays: 'Saturday - Thursday: 9:00 AM - 7:00 PM',
+                friday: 'Friday: 9:00 AM - 12:00 PM, 3:00 PM - 7:00 PM'
+            }
+        }
+    },
+    companyLogo: localStorage.getItem(LOCAL_STORAGE_KEYS.COMPANY_LOGO) || '',
+    heroCover: localStorage.getItem(LOCAL_STORAGE_KEYS.HERO_COVER) || '',
     editingItem: null,
     editingType: null
 };
@@ -27,48 +48,90 @@ let state = {
 const dom = {
     // Admin elements
     adminBtn: document.getElementById('adminBtn'),
+    adminPanelBtn: document.getElementById('adminPanelBtn'),
     adminLoginModal: document.getElementById('adminLoginModal'),
-    closeModal: document.querySelector('.close-modal'),
+    adminPanelModal: document.getElementById('adminPanelModal'),
+    closeModals: document.querySelectorAll('.close-modal'),
+    closeModalBtns: document.querySelectorAll('.close-modal-btn'),
     loginForm: document.getElementById('loginForm'),
     adminPassword: document.getElementById('adminPassword'),
     
+    // Company Info Elements
+    companyLogo: document.getElementById('companyLogo'),
+    companyNameHeader: document.getElementById('companyNameHeader'),
+    companyTaglineHeader: document.getElementById('companyTaglineHeader'),
+    footerLogo: document.getElementById('footerLogo'),
+    footerCompanyName: document.getElementById('footerCompanyName'),
+    footerTagline: document.getElementById('footerTagline'),
+    footerCopyright: document.getElementById('footerCopyright'),
+    footerMessage: document.getElementById('footerMessage'),
+    
+    // Hero Section
+    heroBackground: document.getElementById('heroBackground'),
+    heroTitle: document.getElementById('heroTitle'),
+    heroDescription: document.getElementById('heroDescription'),
+    editCoverBtn: document.getElementById('editCoverBtn'),
+    
     // Action buttons
+    addProductBtn: document.getElementById('addProductBtn'),
     addBrandBtn: document.getElementById('addBrandBtn'),
     addGalleryBtn: document.getElementById('addGalleryBtn'),
+    addFeaturedBtn: document.getElementById('addFeaturedBtn'),
+    editAboutBtn: document.getElementById('editAboutBtn'),
+    editContactBtn: document.getElementById('editContactBtn'),
     
-    // Forms
-    adminProductForm: document.getElementById('adminProductForm'),
-    adminBrandForm: document.getElementById('adminBrandForm'),
-    adminGalleryForm: document.getElementById('adminGalleryForm'),
+    // Modals
+    productFormModal: document.getElementById('productFormModal'),
+    brandFormModal: document.getElementById('brandFormModal'),
+    galleryFormModal: document.getElementById('galleryFormModal'),
     
     // Product form
     productForm: document.getElementById('productForm'),
+    productFormTitle: document.getElementById('productFormTitle'),
     productId: document.getElementById('productId'),
     productName: document.getElementById('productName'),
     productCategory: document.getElementById('productCategory'),
     productDescription: document.getElementById('productDescription'),
     productImageUpload: document.getElementById('productImageUpload'),
-    submitProductBtn: document.getElementById('submitProductBtn'),
-    cancelProductBtn: document.getElementById('cancelProductBtn'),
-    imagePreview: document.getElementById('imagePreview'),
+    productImagePreview: document.getElementById('productImagePreview'),
     
     // Brand form
     brandForm: document.getElementById('brandForm'),
+    brandFormTitle: document.getElementById('brandFormTitle'),
     brandId: document.getElementById('brandId'),
     brandName: document.getElementById('brandName'),
     brandImageUpload: document.getElementById('brandImageUpload'),
-    submitBrandBtn: document.getElementById('submitBrandBtn'),
-    cancelBrandBtn: document.getElementById('cancelBrandBtn'),
     brandImagePreview: document.getElementById('brandImagePreview'),
     
     // Gallery form
     galleryForm: document.getElementById('galleryForm'),
+    galleryFormTitle: document.getElementById('galleryFormTitle'),
     galleryId: document.getElementById('galleryId'),
     galleryTitle: document.getElementById('galleryTitle'),
     galleryImageUpload: document.getElementById('galleryImageUpload'),
-    submitGalleryBtn: document.getElementById('submitGalleryBtn'),
-    cancelGalleryBtn: document.getElementById('cancelGalleryBtn'),
     galleryImagePreview: document.getElementById('galleryImagePreview'),
+    
+    // Admin Panel Forms
+    logoForm: document.getElementById('logoForm'),
+    logoUpload: document.getElementById('logoUpload'),
+    logoImagePreview: document.getElementById('logoImagePreview'),
+    currentLogoPreview: document.getElementById('currentLogoPreview'),
+    
+    coverForm: document.getElementById('coverForm'),
+    coverUpload: document.getElementById('coverUpload'),
+    coverImagePreview: document.getElementById('coverImagePreview'),
+    currentCoverPreview: document.getElementById('currentCoverPreview'),
+    
+    companyInfoForm: document.getElementById('companyInfoForm'),
+    companyName: document.getElementById('companyName'),
+    companyTagline: document.getElementById('companyTagline'),
+    companyDescription: document.getElementById('companyDescription'),
+    
+    // Data Management
+    exportDataBtn: document.getElementById('exportDataBtn'),
+    importDataBtn: document.getElementById('importDataBtn'),
+    resetDataBtn: document.getElementById('resetDataBtn'),
+    importFile: document.getElementById('importFile'),
     
     // Search and filter
     productSearch: document.getElementById('productSearch'),
@@ -79,6 +142,8 @@ const dom = {
     featuredGrid: document.querySelector('.featured-grid'),
     brandsGrid: document.querySelector('.brands-grid'),
     galleryGrid: document.querySelector('.gallery-grid'),
+    aboutContent: document.querySelector('.about-content'),
+    contactInfo: document.querySelector('.contact-info'),
     
     // Toast
     toast: document.getElementById('toast')
@@ -100,6 +165,9 @@ function saveToLocalStorage() {
     localStorage.setItem(LOCAL_STORAGE_KEYS.PRODUCTS, JSON.stringify(state.products));
     localStorage.setItem(LOCAL_STORAGE_KEYS.BRANDS, JSON.stringify(state.brands));
     localStorage.setItem(LOCAL_STORAGE_KEYS.GALLERY, JSON.stringify(state.gallery));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.COMPANY_INFO, JSON.stringify(state.companyInfo));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.COMPANY_LOGO, state.companyLogo);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.HERO_COVER, state.heroCover);
     localStorage.setItem(LOCAL_STORAGE_KEYS.ADMIN_LOGGED_IN, state.isAdminLoggedIn.toString());
 }
 
@@ -109,6 +177,11 @@ function generateId(items) {
 
 function convertImageToBase64(file) {
     return new Promise((resolve, reject) => {
+        if (file.size > MAX_IMAGE_SIZE) {
+            reject(new Error(`Image size should be less than ${MAX_IMAGE_SIZE / 1024 / 1024}MB`));
+            return;
+        }
+        
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
@@ -116,13 +189,23 @@ function convertImageToBase64(file) {
     });
 }
 
+function openModal(modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
 function resetForm(formType) {
     switch(formType) {
         case 'product':
             dom.productForm.reset();
             dom.productId.value = '';
-            dom.imagePreview.innerHTML = '';
-            dom.submitProductBtn.textContent = 'Add Product';
+            dom.productImagePreview.innerHTML = '';
+            dom.productFormTitle.innerHTML = '<i class="fas fa-box"></i> Add New Product';
             state.editingItem = null;
             state.editingType = null;
             break;
@@ -130,7 +213,7 @@ function resetForm(formType) {
             dom.brandForm.reset();
             dom.brandId.value = '';
             dom.brandImagePreview.innerHTML = '';
-            dom.submitBrandBtn.textContent = 'Add Brand';
+            dom.brandFormTitle.innerHTML = '<i class="fas fa-tag"></i> Add New Brand';
             state.editingItem = null;
             state.editingType = null;
             break;
@@ -138,16 +221,195 @@ function resetForm(formType) {
             dom.galleryForm.reset();
             dom.galleryId.value = '';
             dom.galleryImagePreview.innerHTML = '';
-            dom.submitGalleryBtn.textContent = 'Add Image';
+            dom.galleryFormTitle.innerHTML = '<i class="fas fa-image"></i> Add Gallery Image';
             state.editingItem = null;
             state.editingType = null;
+            break;
+        case 'logo':
+            dom.logoForm.reset();
+            dom.logoImagePreview.innerHTML = '';
+            break;
+        case 'cover':
+            dom.coverForm.reset();
+            dom.coverImagePreview.innerHTML = '';
+            break;
+        case 'companyInfo':
+            dom.companyInfoForm.reset();
             break;
     }
 }
 
 // ====================
+// IMAGE MANAGEMENT
+// ====================
+async function handleImageUpload(fileInput, previewElement) {
+    const file = fileInput.files[0];
+    if (!file) return null;
+    
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file', 'error');
+        return null;
+    }
+    
+    try {
+        const base64 = await convertImageToBase64(file);
+        previewElement.innerHTML = `
+            <img src="${base64}" alt="Preview" class="preview-image">
+        `;
+        return base64;
+    } catch (error) {
+        showToast(error.message, 'error');
+        return null;
+    }
+}
+
+function updateCompanyLogo(logoData) {
+    state.companyLogo = logoData;
+    saveToLocalStorage();
+    
+    // Update all logo instances
+    if (state.companyLogo) {
+        dom.companyLogo.src = state.companyLogo;
+        dom.footerLogo.src = state.companyLogo;
+        dom.currentLogoPreview.src = state.companyLogo;
+    }
+    
+    showToast('Company logo updated successfully!');
+}
+
+function updateHeroCover(coverData) {
+    state.heroCover = coverData;
+    saveToLocalStorage();
+    
+    // Update hero background
+    if (state.heroCover) {
+        dom.heroBackground.style.backgroundImage = `url('${state.heroCover}')`;
+        dom.currentCoverPreview.style.backgroundImage = `url('${state.heroCover}')`;
+    }
+    
+    showToast('Cover image updated successfully!');
+}
+
+// ====================
 // RENDER FUNCTIONS
 // ====================
+function renderCompanyInfo() {
+    // Update header
+    dom.companyNameHeader.textContent = state.companyInfo.name;
+    dom.companyTaglineHeader.textContent = state.companyInfo.tagline;
+    
+    // Update footer
+    dom.footerCompanyName.textContent = state.companyInfo.name;
+    dom.footerTagline.textContent = state.companyInfo.tagline;
+    dom.footerCopyright.textContent = state.companyInfo.name + ' BD';
+    dom.footerMessage.textContent = state.companyInfo.description;
+    
+    // Update forms
+    dom.companyName.value = state.companyInfo.name;
+    dom.companyTagline.value = state.companyInfo.tagline;
+    dom.companyDescription.value = state.companyInfo.description;
+    
+    // Update hero
+    dom.heroTitle.textContent = state.companyInfo.name;
+    dom.heroDescription.textContent = state.companyInfo.description;
+    
+    // Update logos
+    if (state.companyLogo) {
+        dom.companyLogo.src = state.companyLogo;
+        dom.footerLogo.src = state.companyLogo;
+        dom.currentLogoPreview.src = state.companyLogo;
+    }
+    
+    // Update hero cover
+    if (state.heroCover) {
+        dom.heroBackground.style.backgroundImage = `url('${state.heroCover}')`;
+        dom.currentCoverPreview.style.backgroundImage = `url('${state.heroCover}')`;
+    }
+}
+
+function renderAboutSection() {
+    dom.aboutContent.innerHTML = `
+        <div class="about-item">
+            <div class="about-icon">
+                <i class="fas fa-chess-king"></i>
+            </div>
+            <h3>Strategic Vision</h3>
+            <p>Established with a clear mission to reduce operational friction and strengthen industrial positioning</p>
+        </div>
+        <div class="about-item">
+            <div class="about-icon">
+                <i class="fas fa-network-wired"></i>
+            </div>
+            <h3>Comprehensive Coverage</h3>
+            <p>Delivering precision automation across all 64 districts of Bangladesh</p>
+        </div>
+        <div class="about-item">
+            <div class="about-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Extensive Portfolio</h3>
+            <p>100+ product series with 10,000+ specifications for complete industrial needs</p>
+        </div>
+        <div class="about-item">
+            <div class="about-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <h3>Strategic Alignment</h3>
+            <p>Solutions chosen not for availability, but for alignment with long-term industrial strategy</p>
+        </div>
+    `;
+}
+
+function renderContactSection() {
+    dom.contactInfo.innerHTML = `
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-chess-king"></i>
+            </div>
+            <h3>Strategic Vision</h3>
+            <p>${state.companyInfo.description}</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>Leadership</h3>
+            <p><strong>Md. Mostafa Shahid</strong><br>Founder & Strategic Director</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+            </div>
+            <h3>Direct Contact</h3>
+            <p>${state.companyInfo.contact.phone1}</p>
+            <p>${state.companyInfo.contact.phone2}</p>
+            <p>${state.companyInfo.contact.email}</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Strategic Location</h3>
+            <p>${state.companyInfo.contact.address}</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3>Strategic Hours</h3>
+            <p><strong>${state.companyInfo.contact.hours.weekdays.split(':')[0]}:</strong> ${state.companyInfo.contact.hours.weekdays.split(':')[1]}</p>
+            <p><strong>${state.companyInfo.contact.hours.friday.split(':')[0]}:</strong> ${state.companyInfo.contact.hours.friday.split(':')[1]}</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <h3>Strategic Intent</h3>
+            <p>By reducing friction across execution and communication, we strengthen positioning, signal intent, and simplify operations.</p>
+        </div>
+    `;
+}
+
 function renderProducts(filteredProducts = state.products) {
     if (filteredProducts.length === 0) {
         dom.productsGrid.innerHTML = `
@@ -355,13 +617,12 @@ function editProduct(id) {
     dom.productName.value = product.name;
     dom.productCategory.value = product.category;
     dom.productDescription.value = product.description;
-    dom.imagePreview.innerHTML = `
+    dom.productImagePreview.innerHTML = `
         <img src="${product.image}" alt="Preview" class="preview-image">
     `;
-    dom.submitProductBtn.textContent = 'Update Product';
+    dom.productFormTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Product';
     
-    dom.adminProductForm.style.display = 'block';
-    dom.adminProductForm.scrollIntoView({ behavior: 'smooth' });
+    openModal(dom.productFormModal);
 }
 
 // Brand CRUD
@@ -420,10 +681,9 @@ function editBrand(id) {
     dom.brandImagePreview.innerHTML = `
         <img src="${brand.image}" alt="Preview" class="preview-image">
     `;
-    dom.submitBrandBtn.textContent = 'Update Brand';
+    dom.brandFormTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Brand';
     
-    dom.adminBrandForm.style.display = 'block';
-    dom.adminBrandForm.scrollIntoView({ behavior: 'smooth' });
+    openModal(dom.brandFormModal);
 }
 
 // Gallery CRUD
@@ -482,52 +742,46 @@ function editGalleryItem(id) {
     dom.galleryImagePreview.innerHTML = `
         <img src="${item.image}" alt="Preview" class="preview-image">
     `;
-    dom.submitGalleryBtn.textContent = 'Update Image';
+    dom.galleryFormTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Gallery Image';
     
-    dom.adminGalleryForm.style.display = 'block';
-    dom.adminGalleryForm.scrollIntoView({ behavior: 'smooth' });
+    openModal(dom.galleryFormModal);
 }
 
 // ====================
 // ADMIN MANAGEMENT
 // ====================
 function updateAdminUI() {
-    const adminButtons = document.querySelectorAll('.admin-action-btn');
-    const actionButtons = document.querySelectorAll('.action-btn');
+    const adminActionButtons = document.querySelectorAll('.admin-action-btn');
+    const editButtons = document.querySelectorAll('.edit-cover-btn, #editAboutBtn, #editContactBtn');
     
     if (state.isAdminLoggedIn) {
+        // Update admin button to show logout
         dom.adminBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-        adminButtons.forEach(btn => btn.style.display = 'flex');
-        actionButtons.forEach(btn => btn.style.display = 'flex');
+        dom.adminPanelBtn.style.display = 'flex';
         
-        // Show add product form button in header
-        if (!document.querySelector('#addProductBtn')) {
-            const addProductBtn = document.createElement('button');
-            addProductBtn.id = 'addProductBtn';
-            addProductBtn.className = 'admin-action-btn';
-            addProductBtn.innerHTML = '<i class="fas fa-plus"></i> Add Product';
-            addProductBtn.onclick = () => {
-                resetForm('product');
-                dom.adminProductForm.style.display = 'block';
-                dom.adminProductForm.scrollIntoView({ behavior: 'smooth' });
-            };
-            document.querySelector('.section-header').appendChild(addProductBtn);
-        }
+        // Show all admin action buttons
+        adminActionButtons.forEach(btn => btn.style.display = 'flex');
+        editButtons.forEach(btn => btn.style.display = 'flex');
+        
+        // Show edit/delete buttons on items
+        document.querySelectorAll('.product-actions, .brand-actions, .gallery-actions')
+            .forEach(actions => actions.style.display = 'flex');
+            
     } else {
+        // Update admin button to show login
         dom.adminBtn.innerHTML = '<i class="fas fa-user-cog"></i> Admin';
-        adminButtons.forEach(btn => btn.style.display = 'none');
-        actionButtons.forEach(btn => btn.style.display = 'none');
+        dom.adminPanelBtn.style.display = 'none';
         
-        // Hide admin forms
-        dom.adminProductForm.style.display = 'none';
-        dom.adminBrandForm.style.display = 'none';
-        dom.adminGalleryForm.style.display = 'none';
+        // Hide all admin action buttons
+        adminActionButtons.forEach(btn => btn.style.display = 'none');
+        editButtons.forEach(btn => btn.style.display = 'none');
         
-        // Remove add product button
-        const addProductBtn = document.querySelector('#addProductBtn');
-        if (addProductBtn) addProductBtn.remove();
+        // Hide edit/delete buttons on items
+        document.querySelectorAll('.product-actions, .brand-actions, .gallery-actions')
+            .forEach(actions => actions.style.display = 'none');
     }
     
+    // Re-render all content
     renderProducts();
     renderBrands();
     renderGallery();
@@ -538,7 +792,7 @@ function loginAdmin(password) {
         state.isAdminLoggedIn = true;
         saveToLocalStorage();
         updateAdminUI();
-        dom.adminLoginModal.style.display = 'none';
+        closeModal(dom.adminLoginModal);
         dom.adminPassword.value = '';
         showToast('Admin login successful!');
     } else {
@@ -550,277 +804,353 @@ function logoutAdmin() {
     state.isAdminLoggedIn = false;
     saveToLocalStorage();
     updateAdminUI();
+    closeModal(dom.adminPanelModal);
     showToast('Logged out successfully');
+}
+
+// ====================
+// DATA EXPORT/IMPORT
+// ====================
+function exportData() {
+    const exportData = {
+        products: state.products,
+        brands: state.brands,
+        gallery: state.gallery,
+        companyInfo: state.companyInfo,
+        companyLogo: state.companyLogo,
+        heroCover: state.heroCover,
+        exportedAt: new Date().toISOString()
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `shafa-automation-backup-${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+    
+    showToast('Data exported successfully!');
+}
+
+function importData(file) {
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            if (!confirm('This will replace all current data. Are you sure?')) return;
+            
+            // Update state with imported data
+            if (importedData.products) state.products = importedData.products;
+            if (importedData.brands) state.brands = importedData.brands;
+            if (importedData.gallery) state.gallery = importedData.gallery;
+            if (importedData.companyInfo) state.companyInfo = importedData.companyInfo;
+            if (importedData.companyLogo) state.companyLogo = importedData.companyLogo;
+            if (importedData.heroCover) state.heroCover = importedData.heroCover;
+            
+            saveToLocalStorage();
+            
+            // Re-render everything
+            renderCompanyInfo();
+            renderProducts();
+            renderFeaturedProducts();
+            renderBrands();
+            renderGallery();
+            renderAboutSection();
+            renderContactSection();
+            updateCategoryFilter();
+            
+            showToast('Data imported successfully!');
+        } catch (error) {
+            showToast('Error importing data. Invalid file format.', 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function resetAllData() {
+    if (!confirm('This will delete ALL data including products, brands, gallery, and company info. Are you absolutely sure?')) return;
+    
+    if (!confirm('This action cannot be undone. Type "RESET" to confirm:')) {
+        const confirmation = prompt('Type "RESET" to confirm deletion:');
+        if (confirmation !== 'RESET') {
+            showToast('Data reset cancelled', 'error');
+            return;
+        }
+    }
+    
+    // Clear all localStorage
+    Object.values(LOCAL_STORAGE_KEYS).forEach(key => {
+        localStorage.removeItem(key);
+    });
+    
+    // Reset state
+    state = {
+        isAdminLoggedIn: false,
+        products: [],
+        brands: [],
+        gallery: [],
+        companyInfo: {
+            name: 'Shafa Abid Automation',
+            tagline: 'Strategic Industrial Solutions',
+            description: 'Strategic-grade automation solutions delivering unmatched value',
+            contact: {
+                phone1: '+880 1869-552775',
+                phone2: '+880 1406-503242',
+                email: 'shafaabidautomation.bd@gmail.com',
+                address: 'Shop No: 01, Porir Rasta, Cort Para, Kumira-4314, Sitakunda, Chittagong',
+                hours: {
+                    weekdays: 'Saturday - Thursday: 9:00 AM - 7:00 PM',
+                    friday: 'Friday: 9:00 AM - 12:00 PM, 3:00 PM - 7:00 PM'
+                }
+            }
+        },
+        companyLogo: '',
+        heroCover: '',
+        editingItem: null,
+        editingType: null
+    };
+    
+    // Re-initialize
+    initializeWebsite();
+    showToast('All data has been reset', 'warning');
 }
 
 // ====================
 // EVENT LISTENERS
 // ====================
-// Admin login/logout
-dom.adminBtn.addEventListener('click', () => {
-    if (state.isAdminLoggedIn) {
-        logoutAdmin();
-    } else {
-        dom.adminLoginModal.style.display = 'flex';
-    }
-});
-
-dom.closeModal.addEventListener('click', () => {
-    dom.adminLoginModal.style.display = 'none';
-});
-
-dom.loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    loginAdmin(dom.adminPassword.value);
-});
-
-// Add buttons
-dom.addBrandBtn.addEventListener('click', () => {
-    resetForm('brand');
-    dom.adminBrandForm.style.display = 'block';
-    dom.adminBrandForm.scrollIntoView({ behavior: 'smooth' });
-});
-
-dom.addGalleryBtn.addEventListener('click', () => {
-    resetForm('gallery');
-    dom.adminGalleryForm.style.display = 'block';
-    dom.adminGalleryForm.scrollIntoView({ behavior: 'smooth' });
-});
-
-// Cancel buttons
-dom.cancelProductBtn.addEventListener('click', () => {
-    resetForm('product');
-    dom.adminProductForm.style.display = 'none';
-});
-
-dom.cancelBrandBtn.addEventListener('click', () => {
-    resetForm('brand');
-    dom.adminBrandForm.style.display = 'none';
-});
-
-dom.cancelGalleryBtn.addEventListener('click', () => {
-    resetForm('gallery');
-    dom.adminGalleryForm.style.display = 'none';
-});
-
-// Image upload previews
-dom.productImageUpload.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+function setupEventListeners() {
+    // Admin login/logout
+    dom.adminBtn.addEventListener('click', () => {
+        if (state.isAdminLoggedIn) {
+            logoutAdmin();
+        } else {
+            openModal(dom.adminLoginModal);
+        }
+    });
     
-    if (!file.type.startsWith('image/')) {
-        showToast('Please select an image file', 'error');
-        return;
-    }
+    // Admin panel
+    dom.adminPanelBtn.addEventListener('click', () => {
+        openModal(dom.adminPanelModal);
+    });
     
-    if (file.size > 5 * 1024 * 1024) {
-        showToast('Image size should be less than 5MB', 'error');
-        return;
-    }
-    
-    try {
-        const base64 = await convertImageToBase64(file);
-        dom.imagePreview.innerHTML = `
-            <img src="${base64}" alt="Preview" class="preview-image">
-        `;
-    } catch (error) {
-        showToast('Error processing image', 'error');
-    }
-});
-
-dom.brandImageUpload.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    if (!file.type.startsWith('image/')) {
-        showToast('Please select an image file', 'error');
-        return;
-    }
-    
-    try {
-        const base64 = await convertImageToBase64(file);
-        dom.brandImagePreview.innerHTML = `
-            <img src="${base64}" alt="Preview" class="preview-image">
-        `;
-    } catch (error) {
-        showToast('Error processing image', 'error');
-    }
-});
-
-dom.galleryImageUpload.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    if (!file.type.startsWith('image/')) {
-        showToast('Please select an image file', 'error');
-        return;
-    }
-    
-    try {
-        const base64 = await convertImageToBase64(file);
-        dom.galleryImagePreview.innerHTML = `
-            <img src="${base64}" alt="Preview" class="preview-image">
-        `;
-    } catch (error) {
-        showToast('Error processing image', 'error');
-    }
-});
-
-// Form submissions
-dom.productForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const imageSrc = dom.imagePreview.querySelector('img')?.src;
-    if (!imageSrc) {
-        showToast('Please upload an image', 'error');
-        return;
-    }
-    
-    const productData = {
-        name: dom.productName.value,
-        category: dom.productCategory.value,
-        description: dom.productDescription.value,
-        image: imageSrc
-    };
-    
-    const productId = parseInt(dom.productId.value);
-    
-    if (productId) {
-        // Update existing product
-        await updateProduct(productId, productData);
-    } else {
-        // Add new product
-        await addProduct(productData);
-    }
-    
-    resetForm('product');
-    dom.adminProductForm.style.display = 'none';
-});
-
-dom.brandForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const imageSrc = dom.brandImagePreview.querySelector('img')?.src;
-    if (!imageSrc) {
-        showToast('Please upload a logo', 'error');
-        return;
-    }
-    
-    const brandData = {
-        name: dom.brandName.value,
-        image: imageSrc
-    };
-    
-    const brandId = parseInt(dom.brandId.value);
-    
-    if (brandId) {
-        await updateBrand(brandId, brandData);
-    } else {
-        await addBrand(brandData);
-    }
-    
-    resetForm('brand');
-    dom.adminBrandForm.style.display = 'none';
-});
-
-dom.galleryForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const imageSrc = dom.galleryImagePreview.querySelector('img')?.src;
-    if (!imageSrc) {
-        showToast('Please upload an image', 'error');
-        return;
-    }
-    
-    const galleryData = {
-        title: dom.galleryTitle.value,
-        image: imageSrc
-    };
-    
-    const galleryId = parseInt(dom.galleryId.value);
-    
-    if (galleryId) {
-        await updateGalleryItem(galleryId, galleryData);
-    } else {
-        await addGalleryItem(galleryData);
-    }
-    
-    resetForm('gallery');
-    dom.adminGalleryForm.style.display = 'none';
-});
-
-// Search and filter
-dom.productSearch.addEventListener('input', filterProducts);
-dom.categoryFilter.addEventListener('change', filterProducts);
-
-// ====================
-// INITIALIZATION
-// ====================
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize with sample data if empty
-    if (state.products.length === 0) {
-        state.products = [
-            {
-                id: 1,
-                name: "Strategic PLC Controller",
-                category: "Automation",
-                description: "Advanced Programmable Logic Controller designed for strategic industrial automation systems that reduce operational friction.",
-                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 2,
-                name: "Premium VFD System",
-                category: "Drives",
-                description: "Strategic-grade Variable Frequency Drive delivering unmatched energy efficiency and operational clarity.",
-                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                createdAt: new Date().toISOString()
-            }
-        ];
-        saveToLocalStorage();
-    }
-    
-    if (state.brands.length === 0) {
-        state.brands = [
-            {
-                id: 1,
-                name: "Siemens",
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siemens_AG_logo.svg/1024px-Siemens_AG_logo.svg.png"
-            },
-            {
-                id: 2,
-                name: "ABB",
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/ABB_logo.svg/1024px-ABB_logo.svg.png"
-            }
-        ];
-        saveToLocalStorage();
-    }
-    
-    // Render all components
-    renderProducts();
-    renderFeaturedProducts();
-    renderBrands();
-    renderGallery();
-    updateCategoryFilter();
-    updateAdminUI();
-    
-    // Smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            }
+    // Close modals
+    dom.closeModals.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            closeModal(modal);
         });
     });
+    
+    dom.closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            closeModal(modal);
+        });
+    });
+    
+    // Close modals when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            closeModal(e.target);
+        }
+    });
+    
+    // Login form
+    dom.loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        loginAdmin(dom.adminPassword.value);
+    });
+    
+    // Edit cover button
+    dom.editCoverBtn.addEventListener('click', () => {
+        openModal(dom.adminPanelModal);
+    });
+    
+    // Add buttons
+    dom.addProductBtn.addEventListener('click', () => {
+        resetForm('product');
+        openModal(dom.productFormModal);
+    });
+    
+    dom.addBrandBtn.addEventListener('click', () => {
+        resetForm('brand');
+        openModal(dom.brandFormModal);
+    });
+    
+    dom.addGalleryBtn.addEventListener('click', () => {
+        resetForm('gallery');
+        openModal(dom.galleryFormModal);
+    });
+    
+    // Image upload previews
+    dom.productImageUpload.addEventListener('change', async () => {
+        await handleImageUpload(dom.productImageUpload, dom.productImagePreview);
+    });
+    
+    dom.brandImageUpload.addEventListener('change', async () => {
+        await handleImageUpload(dom.brandImageUpload, dom.brandImagePreview);
+    });
+    
+    dom.galleryImageUpload.addEventListener('change', async () => {
+        await handleImageUpload(dom.galleryImageUpload, dom.galleryImagePreview);
+    });
+    
+    dom.logoUpload.addEventListener('change', async () => {
+        await handleImageUpload(dom.logoUpload, dom.logoImagePreview);
+    });
+    
+    dom.coverUpload.addEventListener('change', async () => {
+        await handleImageUpload(dom.coverUpload, dom.coverImagePreview);
+    });
+    
+    // Form submissions
+    dom.productForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const imageSrc = dom.productImagePreview.querySelector('img')?.src;
+        if (!imageSrc) {
+            showToast('Please upload a product image', 'error');
+            return;
+        }
+        
+        const productData = {
+            name: dom.productName.value,
+            category: dom.productCategory.value,
+            description: dom.productDescription.value,
+            image: imageSrc
+        };
+        
+        const productId = parseInt(dom.productId.value);
+        
+        if (productId) {
+            await updateProduct(productId, productData);
+        } else {
+            await addProduct(productData);
+        }
+        
+        resetForm('product');
+        closeModal(dom.productFormModal);
+    });
+    
+    dom.brandForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const imageSrc = dom.brandImagePreview.querySelector('img')?.src;
+        if (!imageSrc) {
+            showToast('Please upload a brand logo', 'error');
+            return;
+        }
+        
+        const brandData = {
+            name: dom.brandName.value,
+            image: imageSrc
+        };
+        
+        const brandId = parseInt(dom.brandId.value);
+        
+        if (brandId) {
+            await updateBrand(brandId, brandData);
+        } else {
+            await addBrand(brandData);
+        }
+        
+        resetForm('brand');
+        closeModal(dom.brandFormModal);
+    });
+    
+    dom.galleryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const imageSrc = dom.galleryImagePreview.querySelector('img')?.src;
+        if (!imageSrc) {
+            showToast('Please upload a gallery image', 'error');
+            return;
+        }
+        
+        const galleryData = {
+            title: dom.galleryTitle.value,
+            image: imageSrc
+        };
+        
+        const galleryId = parseInt(dom.galleryId.value);
+        
+        if (galleryId) {
+            await updateGalleryItem(galleryId, galleryData);
+        } else {
+            await addGalleryItem(galleryData);
+        }
+        
+        resetForm('gallery');
+        closeModal(dom.galleryFormModal);
+    });
+    
+    // Admin panel forms
+    dom.logoForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const imageSrc = dom.logoImagePreview.querySelector('img')?.src;
+        if (!imageSrc) {
+            showToast('Please upload a logo image', 'error');
+            return;
+        }
+        
+        updateCompanyLogo(imageSrc);
+        resetForm('logo');
+    });
+    
+    dom.coverForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const imageSrc = dom.coverImagePreview.querySelector('img')?.src;
+        if (!imageSrc) {
+            showToast('Please upload a cover image', 'error');
+            return;
+        }
+        
+        updateHeroCover(imageSrc);
+        resetForm('cover');
+    });
+    
+    dom.companyInfoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        state.companyInfo = {
+            ...state.companyInfo,
+            name: dom.companyName.value,
+            tagline: dom.companyTagline.value,
+            description: dom.companyDescription.value
+        };
+        
+        saveToLocalStorage();
+        renderCompanyInfo();
+        showToast('Company information updated successfully!');
+    });
+    
+    // Data management
+    dom.exportDataBtn.addEventListener('click', exportData);
+    
+    dom.importDataBtn.addEventListener('click', () => {
+        dom.importFile.click();
+    });
+    
+    dom.importFile.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            importData(e.target.files[0]);
+            e.target.value = ''; // Reset file input
+        }
+    });
+    
+    dom.resetDataBtn.addEventListener('click', resetAllData);
+    
+    // Search and filter
+    dom.productSearch.addEventListener('input', filterProducts);
+    dom.categoryFilter.addEventListener('change', filterProducts);
     
     // Mobile menu toggle
     document.querySelector('.menu-toggle').addEventListener('click', function() {
@@ -834,13 +1164,75 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            if (this.getAttribute('href') === '#') return;
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// ====================
+// INITIALIZATION
+// ====================
+function initializeWebsite() {
+    // Initialize with sample data if empty
+    if (state.products.length === 0) {
+        state.products = [
+            {
+                id: 1,
+                name: "Strategic PLC Controller",
+                category: "Automation",
+                description: "Advanced Programmable Logic Controller designed for strategic industrial automation systems.",
+                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                createdAt: new Date().toISOString()
+            }
+        ];
+    }
+    
+    if (state.brands.length === 0) {
+        state.brands = [
+            {
+                id: 1,
+                name: "Siemens",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siemens_AG_logo.svg/1024px-Siemens_AG_logo.svg.png"
+            }
+        ];
+    }
+    
+    // Save initial state
+    saveToLocalStorage();
+    
+    // Render all components
+    renderCompanyInfo();
+    renderAboutSection();
+    renderContactSection();
+    renderProducts();
+    renderFeaturedProducts();
+    renderBrands();
+    renderGallery();
+    updateCategoryFilter();
+    updateAdminUI();
+    
     // Update footer year
     document.getElementById('currentYear').textContent = new Date().getFullYear();
     
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === dom.adminLoginModal) {
-            dom.adminLoginModal.style.display = 'none';
-        }
-    });
-});
+    // Setup event listeners
+    setupEventListeners();
+}
+
+// ====================
+// START APPLICATION
+// ====================
+document.addEventListener('DOMContentLoaded', initializeWebsite);
